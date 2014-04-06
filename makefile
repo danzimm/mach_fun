@@ -2,7 +2,7 @@ CC=clang
 LD=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
 MIG=mig
 
-all: processorcontrol server client
+all: processorcontrol server client lsserv
 
 processorcontrol: processorcontrol.o
 	$(LD) $< -macosx_version_min 10.8 -framework System -o $@
@@ -18,6 +18,9 @@ exceptionhandler: exceptions.c /usr/include/mach/mach_exc.defs
 	$(CC) -c exceptions.c -o exceptions.o -Wall -Werror
 	$(CC) -c mach_excServer.c -o mach_excServer.o
 	$(LD) exceptions.o mach_excServer.o -macosx_version_min 10.8 -framework System -lcapstone -o $@
+
+lsserv: lsserv.o
+	$(LD) $< -macosx_version_min 10.8 -framework System -o $@
 
 %.o: %.c
 	$(CC) -c $< -o $@ -Wall -Werror
