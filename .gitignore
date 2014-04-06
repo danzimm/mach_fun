@@ -1,0 +1,4 @@
+*.o
+processorcontrol
+server
+client
