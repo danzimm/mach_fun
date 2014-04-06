@@ -30,7 +30,6 @@ kern_return_t catch_mach_exception_raise(mach_port_t exception_port, mach_port_t
   mach_msg_type_number_t count = x86_THREAD_STATE_COUNT;
   int insn_len = 0;
 
-  printf("%#02x\n", thread);
   if ((kr = thread_get_state(thread, x86_THREAD_STATE, (thread_state_t)&state, &count)) != KERN_SUCCESS) {
     mach_error("thread_get_state", kr);
     goto bad;
