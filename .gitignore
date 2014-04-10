@@ -8,3 +8,6 @@ lsserv
 notifications
 UNDRequest.*
 usernotif
+inject
+injectee
+libtstlib.dylib

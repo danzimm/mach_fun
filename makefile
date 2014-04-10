@@ -2,7 +2,7 @@ CC=clang
 LD=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld
 MIG=mig
 
-all: processorcontrol server client lsserv notifications
+all: processorcontrol server client lsserv notifications libtstlib.dylib injectee inject
 
 processorcontrol: processorcontrol.o
 	$(LD) $< -macosx_version_min 10.8 -framework System -o $@
@@ -29,10 +29,20 @@ notifications: notifications.c include/UserNotification/UNDRequest.defs
 lsserv: lsserv.o
 	$(LD) $< -macosx_version_min 10.8 -framework System -o $@
 
+libtstlib.dylib: tstlib.o
+	$(LD) $< -macosx_version_min 10.8 -framework System -dylib -o $@
+
+injectee: injectee.o
+	$(LD) $< -macosx_version_min 10.8 -framework System -o $@
+
+inject: inject.o Info2.plist
+	$(LD) $< -sectcreate __TEXT __info_plist Info2.plist -macosx_version_min 10.8 -framework System -o $@
+	codesign -s inject_codesign $@
+
 %.o: %.c
 	$(CC) -c $< -o $@ -Wall -Werror
 
 .PHONY: all clean
 
 clean:
-	rm -f processorcontrol processorcontrol.o server.o client.o server client
+	rm -f processorcontrol processorcontrol.o server.o client.o server client inject injectee exceptionhandler libtstlib.dylib lsserv
